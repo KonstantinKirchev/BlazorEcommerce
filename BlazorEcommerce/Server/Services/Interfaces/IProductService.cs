@@ -4,6 +4,6 @@
     using Microsoft.AspNetCore.Mvc;
     public interface IProductService
     {
-        Task<ActionResult<List<Product>>> GetProductsAsync();
+        Task<ActionResult<ServiceResponse<List<Product>>>> GetProductsAsync();
     }
 }

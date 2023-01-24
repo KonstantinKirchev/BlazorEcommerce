@@ -1,5 +1,6 @@
 ﻿namespace BlazorEcommerce.Client.Shared
 {
+    using BlazorEcommerce.Shared;
     using BlazorEcommerce.Shared.Models;
     using Microsoft.AspNetCore.Components;
     using System.Net.Http.Json;
@@ -16,9 +17,9 @@
         {
             try
             {
-                var response = await HttpClient.GetFromJsonAsync<List<Product>>("api/product");
-                if (response != null)
-                    Products = response;
+                var response = await HttpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>("api/product");
+                if (response != null && response.Data != null)
+                    Products = response.Data;
             }
             catch (Exception)
             {

@@ -12,9 +12,16 @@
         {
         }
 
-        public async Task<ActionResult<List<Product>>> GetProductsAsync()
+        public async Task<ActionResult<ServiceResponse<List<Product>>>> GetProductsAsync()
         {   
-            return await this.context.Products.ToListAsync();
+            var products = await this.context.Products.ToListAsync();
+            
+            var response = new ServiceResponse<List<Product>>()
+            {
+                Data = products
+            };
+
+            return response;
         }
     }
 }
