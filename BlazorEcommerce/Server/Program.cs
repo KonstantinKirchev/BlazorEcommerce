@@ -1,9 +1,14 @@
 global using BlazorEcommerce.Shared;
+global using Microsoft.EntityFrameworkCore;
+using BlazorEcommerce.Server.Data;
 using Microsoft.AspNetCore.ResponseCompression;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<BlazorEcommerceDbContext>(options =>
+    options.UseSqlServer(connectionString));
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
