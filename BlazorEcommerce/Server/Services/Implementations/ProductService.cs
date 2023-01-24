@@ -12,7 +12,7 @@
         {
         }
 
-        public async Task<ActionResult<List<Product>>> GetProducts()
+        public async Task<ActionResult<List<Product>>> GetProductsAsync()
         {   
             return await this.context.Products.ToListAsync();
         }

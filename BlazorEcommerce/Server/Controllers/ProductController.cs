@@ -17,7 +17,7 @@
         [HttpGet]
         public async Task<ActionResult<List<Product>>> GetProducts()
         {
-            var products = await this.productService.GetProducts();
+            var products = await this.productService.GetProductsAsync();
 
             return Ok(products.Value);
         }
