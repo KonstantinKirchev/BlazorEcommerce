@@ -1,6 +1,6 @@
 ﻿namespace BlazorEcommerce.Server.Services
 {
-    public class ServiceBase
+    public abstract class ServiceBase
     {
         protected readonly BlazorEcommerceDbContext context;
 
