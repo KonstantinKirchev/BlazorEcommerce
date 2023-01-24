@@ -4,7 +4,7 @@ namespace BlazorEcommerce.Server.Data
 {
     public class BlazorEcommerceDbContext : DbContext
     {
-        public BlazorEcommerceDbContext(DbContextOptions<DbContext> options) 
+        public BlazorEcommerceDbContext(DbContextOptions<BlazorEcommerceDbContext> options) 
             : base(options)
         {
 
