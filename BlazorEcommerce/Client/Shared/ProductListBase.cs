@@ -1,23 +1,20 @@
 ﻿namespace BlazorEcommerce.Client.Shared
 {
     using Microsoft.AspNetCore.Components;
-    using System.Threading.Tasks;
 
-    public class ProductListBase : ComponentBase
+    public class ProductListBase : ComponentBase, IDisposable
     {
         [Inject]
         public IProductService? ProductService { get; set; }
 
-        protected override async Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
-            try
-            {
-                await ProductService.GetProducts();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            ProductService.ProductsChanged += StateHasChanged;
+        }
+
+        public void Dispose()
+        {
+            ProductService.ProductsChanged -= StateHasChanged;
         }
     }
 }
