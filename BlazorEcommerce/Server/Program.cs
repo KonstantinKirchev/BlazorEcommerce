@@ -1,5 +1,7 @@
-global using BlazorEcommerce.Shared;
+global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.EntityFrameworkCore;
+global using BlazorEcommerce.Shared;
+global using BlazorEcommerce.Shared.Models;
 global using BlazorEcommerce.Server.Data;
 global using BlazorEcommerce.Server.Services.Interfaces;
 global using BlazorEcommerce.Server.Services.Implementations;
@@ -18,6 +20,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 var app = builder.Build();
 
