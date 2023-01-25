@@ -7,17 +7,17 @@
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly IProductService productService;
+        private readonly IProductService _productService;
 
         public ProductController(IProductService productService)
         {
-            this.productService = productService;
+            _productService = productService;
         }
 
         [HttpGet]
         public async Task<ActionResult<ServiceResponse<List<Product>>>> GetProducts()
         {
-            var products = await this.productService.GetProductsAsync();
+            var products = await _productService.GetProductsAsync();
 
             return Ok(products.Value);
         }
@@ -25,7 +25,7 @@
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ServiceResponse<Product>>> GetProduct(int id)
         {
-            var product = await this.productService.GetProductAsync(id);
+            var product = await _productService.GetProductAsync(id);
 
             return Ok(product.Value);
         }
@@ -33,9 +33,23 @@
         [HttpGet("category/{categoryUrl}")]
         public async Task<ActionResult<ServiceResponse<List<Product>>>> GetProductsByCategory(string categoryUrl)
         {
-            var products = await this.productService.GetProductsByCategoryAsync(categoryUrl);
+            var products = await _productService.GetProductsByCategoryAsync(categoryUrl);
 
             return Ok(products.Value);
+        }
+
+        [HttpGet("search/{searchText}")]
+        public async Task<ActionResult<ServiceResponse<List<Product>>>> SearchProducts(string searchText)
+        {
+            var result = await _productService.SearchProducts(searchText);
+            return Ok(result);
+        }
+
+        [HttpGet("searchsuggestions/{searchText}")]
+        public async Task<ActionResult<ServiceResponse<List<Product>>>> GetProductSearchSuggestions(string searchText)
+        {
+            var result = await _productService.GetProductSearchSuggestions(searchText);
+            return Ok(result);
         }
     }
 }
