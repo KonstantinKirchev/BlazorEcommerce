@@ -38,5 +38,17 @@
 
             return response;
         }
+
+        public async Task<ActionResult<ServiceResponse<List<Product>>>> GetProductsByCategoryAsync(string categoryUrl)
+        {
+            var products = await context.Products.Where(c => c.Category.Url.ToLower().Equals(categoryUrl.ToLower())).ToListAsync();
+
+            var response = new ServiceResponse<List<Product>>()
+            {
+                Data = products
+            };
+
+            return response;
+        }
     }
 }

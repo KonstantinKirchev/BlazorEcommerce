@@ -29,5 +29,13 @@
 
             return Ok(product.Value);
         }
+
+        [HttpGet("category/{categoryUrl}")]
+        public async Task<ActionResult<ServiceResponse<List<Product>>>> GetProductsByCategory(string categoryUrl)
+        {
+            var products = await this.productService.GetProductsByCategoryAsync(categoryUrl);
+
+            return Ok(products.Value);
+        }
     }
 }
