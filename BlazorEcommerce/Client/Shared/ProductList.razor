@@ -2,7 +2,7 @@
 
 @if (ProductService?.Products == null)
 {
-    <span>Loading products ...</span>
+    <span>@ProductService?.Message</span>
 }
 else {
     <ul class="list-unstyled">

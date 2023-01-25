@@ -4,8 +4,8 @@ namespace BlazorEcommerce.Client.Services.Implementations
 {
     public class CategoryService : ServiceBase, ICategoryService
     {
-        public CategoryService(HttpClient httpClient) 
-            : base(httpClient)
+        public CategoryService(HttpClient _httpClient) 
+            : base(_httpClient)
         {
         }
 
@@ -13,7 +13,7 @@ namespace BlazorEcommerce.Client.Services.Implementations
 
         public async Task GetCategories()
         {
-            var response = await this.httpClient.GetFromJsonAsync<ServiceResponse<List<Category>>>("api/category");
+            var response = await _httpClient.GetFromJsonAsync<ServiceResponse<List<Category>>>("api/category");
             if (response != null && response.Data != null)
                 Categories = response.Data;
         }

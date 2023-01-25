@@ -2,11 +2,11 @@
 {
     public abstract class ServiceBase
     {
-        protected readonly HttpClient httpClient;
+        protected readonly HttpClient _httpClient;
 
         public ServiceBase(HttpClient httpClient)
         {
-            this.httpClient = httpClient;
+            _httpClient = httpClient;
         }
     }
 }
