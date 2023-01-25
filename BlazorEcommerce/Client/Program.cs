@@ -3,6 +3,7 @@ global using BlazorEcommerce.Shared.Models;
 global using BlazorEcommerce.Client.Services.Interfaces;
 global using BlazorEcommerce.Client.Services.Implementations;
 global using System.Net.Http.Json;
+global using Microsoft.AspNetCore.Components;
 using BlazorEcommerce.Client;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
