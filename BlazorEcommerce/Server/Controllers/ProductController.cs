@@ -21,5 +21,13 @@
 
             return Ok(products.Value);
         }
+
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<ServiceResponse<Product>>> GetProduct(int id)
+        {
+            var product = await this.productService.GetProductAsync(id);
+
+            return Ok(product.Value);
+        }
     }
 }

@@ -5,5 +5,7 @@
     public interface IProductService
     {
         Task<ActionResult<ServiceResponse<List<Product>>>> GetProductsAsync();
+
+        Task<ActionResult<ServiceResponse<Product>>> GetProductAsync(int id);
     }
 }
