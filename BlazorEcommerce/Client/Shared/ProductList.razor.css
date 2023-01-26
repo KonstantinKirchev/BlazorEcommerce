@@ -41,13 +41,21 @@
     justify-content: flex-end;
 }
 
-@media (max-width: 1023.98px) {
-    .media {
-        flex-direction: column;
-    }
-
-    .media-img-wrapper {
-        width: 100%;
-        height: auto;
-    }
+.btn-info {
+    color: #fff;
 }
+
+.btn-outline-info:hover {
+    color: #fff;
+}
+
+    @media (max-width: 1023.98px) {
+        .media {
+            flex-direction: column;
+        }
+
+        .media-img-wrapper {
+            width: 100%;
+            height: auto;
+        }
+    }
