@@ -1,4 +1,5 @@
-﻿using static System.Net.WebRequestMethods;
+﻿using System.Net.Http;
+using static System.Net.WebRequestMethods;
 
 namespace BlazorEcommerce.Client.Services.Implementations
 {
@@ -25,7 +26,7 @@ namespace BlazorEcommerce.Client.Services.Implementations
         public async Task GetProducts(string? categoryUrl = null)
         {
             var response = categoryUrl == null ?
-               await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>("api/product") :
+               await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>("api/product/featured") : 
                await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>($"api/product/category/{categoryUrl}");
             
             if (response != null && response.Data != null)
