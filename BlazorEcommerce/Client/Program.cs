@@ -1,5 +1,6 @@
 global using BlazorEcommerce.Shared;
 global using BlazorEcommerce.Shared.Models;
+global using BlazorEcommerce.Shared.Models.ViewModels;
 global using BlazorEcommerce.Client.Services.Interfaces;
 global using BlazorEcommerce.Client.Services.Implementations;
 global using System.Net.Http.Json;

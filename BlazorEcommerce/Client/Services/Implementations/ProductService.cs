@@ -1,7 +1,4 @@
-﻿using System.Net.Http;
-using static System.Net.WebRequestMethods;
-
-namespace BlazorEcommerce.Client.Services.Implementations
+﻿namespace BlazorEcommerce.Client.Services.Implementations
 {
     public class ProductService : ServiceBase, IProductService
     {

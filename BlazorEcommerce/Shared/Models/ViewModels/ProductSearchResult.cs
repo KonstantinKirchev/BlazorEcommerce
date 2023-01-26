@@ -1,4 +1,4 @@
-namespace BlazorEcommerce.Shared.Models
+namespace BlazorEcommerce.Shared.Models.ViewModels
 {
     public class ProductSearchResult
     {

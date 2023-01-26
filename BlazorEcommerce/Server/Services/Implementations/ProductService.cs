@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace BlazorEcommerce.Server.Services.Implementations
+﻿namespace BlazorEcommerce.Server.Services.Implementations
 {
     public class ProductService : ServiceBase, IProductService
     {
