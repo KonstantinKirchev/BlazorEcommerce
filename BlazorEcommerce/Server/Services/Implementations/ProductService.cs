@@ -4,8 +4,8 @@ namespace BlazorEcommerce.Server.Services.Implementations
 {
     public class ProductService : ServiceBase, IProductService
     {
-        public ProductService(BlazorEcommerceDbContext context) 
-            : base(context)
+        public ProductService(BlazorEcommerceDbContext _context) 
+            : base(_context)
         {
         }
 
@@ -13,7 +13,7 @@ namespace BlazorEcommerce.Server.Services.Implementations
         {
             var response = new ServiceResponse<Product>();
 
-            var product = await context.Products
+            var product = await _context.Products
                 .Include(p => p.Variants)
                 .ThenInclude(v => v.ProductType)
                 .FirstOrDefaultAsync(p => p.Id == id);
@@ -34,7 +34,7 @@ namespace BlazorEcommerce.Server.Services.Implementations
 
         public async Task<ActionResult<ServiceResponse<List<Product>>>> GetProductsAsync()
         {   
-            var products = await this.context.Products
+            var products = await _context.Products
                 .Include(p => p.Variants)
                 .ToListAsync();
             
@@ -48,7 +48,7 @@ namespace BlazorEcommerce.Server.Services.Implementations
 
         public async Task<ActionResult<ServiceResponse<List<Product>>>> GetProductsByCategoryAsync(string categoryUrl)
         {
-            var products = await context.Products
+            var products = await _context.Products
                 .Where(c => c.Category.Url.ToLower().Equals(categoryUrl.ToLower()))
                 .Include(p => p.Variants)
                 .ToListAsync();
@@ -107,12 +107,25 @@ namespace BlazorEcommerce.Server.Services.Implementations
 
         private async Task<List<Product>> FindProductsBySearchText(string searchText)
         {
-            return await context.Products
+            return await _context.Products
                                 .Where(p => p.Title.ToLower().Contains(searchText.ToLower())
                                 ||
                                 p.Description.ToLower().Contains(searchText.ToLower()))
                                 .Include(p => p.Variants)
                                 .ToListAsync();
+        }
+
+        public async Task<ServiceResponse<List<Product>>> GetFeaturedProducts()
+        {
+            var response = new ServiceResponse<List<Product>>
+            {
+                Data = await _context.Products
+                    .Where(p => p.Featured)
+                    .Include(p => p.Variants)
+                    .ToListAsync()
+            };
+
+            return response;
         }
     }
 }

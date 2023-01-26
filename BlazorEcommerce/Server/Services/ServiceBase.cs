@@ -2,11 +2,11 @@
 {
     public abstract class ServiceBase
     {
-        protected readonly BlazorEcommerceDbContext context;
+        protected readonly BlazorEcommerceDbContext _context;
 
         public ServiceBase(BlazorEcommerceDbContext context)
         {
-            this.context = context;
+            _context = context;
         }
     }
 }

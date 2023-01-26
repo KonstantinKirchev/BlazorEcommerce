@@ -9,7 +9,7 @@
 
         public async Task<ActionResult<ServiceResponse<List<Category>>>> GetCategoriesAsync()
         {
-            var categories = await this.context.Categories.ToListAsync();
+            var categories = await _context.Categories.ToListAsync();
 
             var response = new ServiceResponse<List<Category>>()
             {
