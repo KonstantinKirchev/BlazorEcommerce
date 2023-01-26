@@ -37,6 +37,10 @@
     text-decoration: line-through;
 }
 
+.pagination {
+    justify-content: flex-end;
+}
+
 @media (max-width: 1023.98px) {
     .media {
         flex-direction: column;
