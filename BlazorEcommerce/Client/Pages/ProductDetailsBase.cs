@@ -12,6 +12,9 @@
         [Inject]
         public IProductService? ProductService { get; set; }
 
+        [Inject]
+        public ICartService CartService { get; set; }
+
         [Parameter]
         public int Id { get; set; }
 
@@ -46,6 +49,18 @@
         {
             var variant = product.Variants.FirstOrDefault(v => v.ProductTypeId == currentTypeId);
             return variant;
+        }
+
+        protected async Task AddToCart()
+        {
+            var productVariant = GetSelectedVariant();
+            var cartItem = new CartItem
+            {
+                ProductId = productVariant.ProductId,
+                ProductTypeId = productVariant.ProductTypeId
+            };
+
+            await CartService.AddToCart(cartItem);
         }
     }
 }
