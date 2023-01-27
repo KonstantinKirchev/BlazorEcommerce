@@ -3,16 +3,12 @@
     public class OrderService : ServiceBase, IOrderService
     { 
 
-        private readonly AuthenticationStateProvider _authStateProvider;
         private readonly IAuthService _authService;
-        private readonly NavigationManager _navigationManager;
 
         public OrderService(HttpClient httpClient,
-            IAuthService authService,
-            NavigationManager navigationManager) : base(httpClient)
+            IAuthService authService) : base(httpClient)
         {
             _authService = authService;
-            _navigationManager = navigationManager;
         }
 
         public async Task<OrderDetailsResponse> GetOrderDetails(int orderId)
@@ -27,15 +23,17 @@
             return result.Data;
         }
 
-        public async Task PlaceOrder()
+        public async Task<string> PlaceOrder()
         {
             if (await _authService.IsUserAuthenticated())
             {
-                await _httpClient.PostAsync("api/order", null);
+                var result = await _httpClient.PostAsync("api/payment/checkout", null);
+                var url = await result.Content.ReadAsStringAsync();
+                return url;
             }
             else
             {
-                _navigationManager.NavigateTo("login");
+                return "login";
             }
         }
     }
