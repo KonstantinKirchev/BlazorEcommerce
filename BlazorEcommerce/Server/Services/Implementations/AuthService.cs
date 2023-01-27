@@ -8,12 +8,16 @@
     public class AuthService : ServiceBase, IAuthService
     {
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AuthService(BlazorEcommerceDbContext _context, IConfiguration configuration) 
+        public AuthService(BlazorEcommerceDbContext _context, IConfiguration configuration, IHttpContextAccessor httpContextAccessor) 
             : base(_context)
         {
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
+
+        public int GetUserId() => int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
 
         public async Task<ServiceResponse<int>> Register(User user, string password)
         {
