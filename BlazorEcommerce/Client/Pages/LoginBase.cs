@@ -21,6 +21,9 @@
         [Inject]
         public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
+        [Inject]
+        public ICartService CartService { get; set; }
+
         protected override void OnInitialized()
         {
             var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
@@ -39,6 +42,8 @@
 
                 await LocalStorage.SetItemAsync("authToken", result.Data);
                 await AuthenticationStateProvider.GetAuthenticationStateAsync();
+                await CartService.StoreCartItems(true);
+                await CartService.GetCartItemsCount();
                 NavigationManager.NavigateTo(returnUrl);
             }
             else
