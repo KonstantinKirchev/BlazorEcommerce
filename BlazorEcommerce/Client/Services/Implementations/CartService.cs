@@ -5,7 +5,7 @@
         private readonly ILocalStorageService _localStorage;
         private readonly IAuthService _authService;
 
-        public CartService(ILocalStorageService localStorage, HttpClient httpClient, IAuthService authService) 
+        public CartService(HttpClient httpClient, ILocalStorageService localStorage, IAuthService authService) 
             : base(httpClient)
         {
             _localStorage = localStorage;

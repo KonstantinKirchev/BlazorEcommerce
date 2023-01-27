@@ -4,12 +4,17 @@
     {
         protected List<CartProductResponse> cartProducts = null;
         protected string message = "Loading cart...";
+        protected bool orderPlaced = false;
 
         [Inject]
         public ICartService CartService { get; set; }
 
+        [Inject]
+        public IOrderService OrderService { get; set; }
+
         protected override async Task OnInitializedAsync()
         {
+            orderPlaced = false;
             await LoadCart();
         }
 
@@ -36,6 +41,13 @@
             if (product.Quantity < 1)
                 product.Quantity = 1;
             await CartService.UpdateQuantity(product);
+        }
+
+        protected async Task PlaceOrder()
+        {
+            await OrderService.PlaceOrder();
+            await CartService.GetCartItemsCount();
+            orderPlaced = true;
         }
     }
 }
