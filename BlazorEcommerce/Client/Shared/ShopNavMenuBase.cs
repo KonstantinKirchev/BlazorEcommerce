@@ -1,6 +1,6 @@
 ﻿namespace BlazorEcommerce.Client.Shared
 {
-    public class ShopNavMenuBase : ComponentBase
+    public class ShopNavMenuBase : ComponentBase, IDisposable
     {
         [Inject]
         public ICategoryService CategoryService { get; set; }
@@ -17,6 +17,12 @@
         protected override async Task OnInitializedAsync()
         {
             await CategoryService.GetCategories();
+            CategoryService.OnChange += StateHasChanged;
+        }
+
+        public void Dispose()
+        {
+            CategoryService.OnChange -= StateHasChanged;
         }
     }
 }
