@@ -112,5 +112,14 @@
                 product.Images.Add(new Image { Data = imageData });
             }
         }
+
+        protected void RemoveImage(int id)
+        {
+            var image = product.Images.FirstOrDefault(i => i.Id == id);
+            if (image != null)
+            {
+                product.Images.Remove(image);
+            }
+        }
     }
 }

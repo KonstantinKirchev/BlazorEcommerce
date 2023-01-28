@@ -37,6 +37,7 @@ else
                 foreach (var image in product.Images)
                 {
                     <img src="@image.Data" />
+                    <button type="button" @onclick="(() => RemoveImage(image.Id))">Remove</button>
                 }
             }
         </div>
