@@ -14,7 +14,7 @@
             IAuthService authService,
             IOrderService orderService)
         {
-            StripeConfiguration.ApiKey = "sk_test_51HnFFuJWja1dketA1LY3VQds3XWpByD5GE8laKrxyNldWKnXXdktvITJiG3PYNDMwpSkrAv33d7JjvHDEUGPPo2E00vkDMlVIb";
+            StripeConfiguration.ApiKey = "sk_test_51IkXZJCdKFy9M6tTaxjIzVYuu97QpMITGvFx1oSAWEZmr9JIWojPyUrBosYCJdcFyW42mb8ZJoLA84ZJZ1KxHGXg00cV0BRyKr";
 
             _cartService = cartService;
             _authService = authService;

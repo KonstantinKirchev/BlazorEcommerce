@@ -4,6 +4,7 @@
     {
         protected List<CartProductResponse> cartProducts = null;
         protected string message = "Loading cart...";
+        protected bool isAuthenticated = false;
 
         [Inject]
         public ICartService CartService { get; set; }
@@ -14,8 +15,12 @@
         [Inject]
         public NavigationManager NavigationManager { get; set; }
 
+        [Inject]
+        public IAuthService AuthService { get; set; }
+
         protected override async Task OnInitializedAsync()
         {
+            isAuthenticated = await AuthService.IsUserAuthenticated();
             await LoadCart();
         }
 
