@@ -1,5 +1,6 @@
 ﻿namespace BlazorEcommerce.Client.Pages.Admin
 {
+    using Microsoft.AspNetCore.Components.Forms;
     using Microsoft.JSInterop;
     public class EditProductBase : ComponentBase
     {
@@ -96,6 +97,19 @@
             {
                 await ProductService.DeleteProduct(product);
                 NavigationManager.NavigateTo("admin/products");
+            }
+        }
+
+        protected async Task OnFileChange(InputFileChangeEventArgs e)
+        {
+            var format = "image/png";
+            foreach (var image in e.GetMultipleFiles(int.MaxValue))
+            {
+                var resizedImage = await image.RequestImageFileAsync(format, 200, 200);
+                var buffer = new byte[resizedImage.Size];
+                await resizedImage.OpenReadStream().ReadAsync(buffer);
+                var imageData = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+                product.Images.Add(new Image { Data = imageData });
             }
         }
     }
