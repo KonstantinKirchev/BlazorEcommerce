@@ -21,7 +21,7 @@
         [Inject]
         public NavigationManager NavigationManager { get; set; }
         [Inject]
-        public JSRuntime JSRuntime { get; set; }
+        public IJSRuntime JSRuntime { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
