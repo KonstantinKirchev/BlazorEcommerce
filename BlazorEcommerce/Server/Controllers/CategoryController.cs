@@ -1,5 +1,6 @@
 ﻿namespace BlazorEcommerce.Server.Controllers
 {
+    using BlazorEcommerce.Server.Infrastructure;
     using Microsoft.AspNetCore.Authorization;
 
     [Route("api/[controller]")]
@@ -16,36 +17,93 @@
         [HttpGet]
         public async Task<ActionResult<ServiceResponse<List<Category>>>> GetCategories()
         {
-            var result = await _categoryService.GetCategoriesAsync();
-            return Ok(result.Value);
+            try
+            {
+                var result = await _categoryService.GetCategoriesAsync();
+                
+                if (result == null)
+                    return NotFound();
+                
+                return Ok(result.Value);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorRetrieving);
+            }
+            
         }
 
         [HttpGet("admin"), Authorize(Roles = "Admin")]
         public async Task<ActionResult<ServiceResponse<List<Category>>>> GetAdminCategories()
         {
-            var result = await _categoryService.GetAdminCategories();
-            return Ok(result);
+            try
+            {
+                var result = await _categoryService.GetAdminCategories();
+
+                if (result == null)
+                    return NotFound();
+
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorRetrieving);
+            }
         }
 
         [HttpDelete("admin/{id}"), Authorize(Roles = "Admin")]
         public async Task<ActionResult<ServiceResponse<List<Category>>>> DeleteCategory(int id)
         {
-            var result = await _categoryService.DeleteCategory(id);
-            return Ok(result);
+            try
+            {
+                var result = await _categoryService.DeleteCategory(id);
+
+                if (result == null)
+                    return BadRequest();
+
+                return AcceptedAtAction(nameof(DeleteCategory), result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorDeleting);
+            }
+            
         }
 
         [HttpPost("admin"), Authorize(Roles = "Admin")]
         public async Task<ActionResult<ServiceResponse<List<Category>>>> AddCategory(Category category)
         {
-            var result = await _categoryService.AddCategory(category);
-            return Ok(result);
+            try
+            {
+                var result = await _categoryService.AddCategory(category);
+
+                if (result == null)
+                    return BadRequest();
+
+                return CreatedAtAction(nameof(AddCategory), result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorAdding);
+            }
         }
 
         [HttpPut("admin"), Authorize(Roles = "Admin")]
         public async Task<ActionResult<ServiceResponse<List<Category>>>> UpdateCategory(Category category)
         {
-            var result = await _categoryService.UpdateCategory(category);
-            return Ok(result);
+            try
+            {
+                var result = await _categoryService.UpdateCategory(category);
+                
+                if (result == null)
+                    return BadRequest();
+
+                return AcceptedAtAction(nameof(UpdateCategory), result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorUpdating);
+            }
         }
     }
 }

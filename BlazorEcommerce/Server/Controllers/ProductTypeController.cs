@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using BlazorEcommerce.Server.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BlazorEcommerce.Server.Controllers
 {
@@ -17,22 +18,58 @@ namespace BlazorEcommerce.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<ServiceResponse<List<ProductType>>>> GetProductTypes()
         {
-            var response = await _productTypeService.GetProductTypes();
-            return Ok(response);
+            try
+            {
+                var result = await _productTypeService.GetProductTypes();
+
+                if (result == null)
+                    return NotFound();
+
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorRetrieving);
+            }
         }
 
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<List<ProductType>>>> AddProductType(ProductType productType)
         {
-            var response = await _productTypeService.AddProductType(productType);
-            return Ok(response);
+            try
+            {
+                var result = await _productTypeService.AddProductType(productType);
+
+                if (result == null)
+                    return NotFound();
+
+                return CreatedAtAction(nameof(AddProductType), result);
+            }
+            catch (Exception)
+            {
+
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorAdding);
+            }
         }
 
         [HttpPut]
         public async Task<ActionResult<ServiceResponse<List<ProductType>>>> UpdateProductType(ProductType productType)
         {
-            var response = await _productTypeService.UpdateProductType(productType);
-            return Ok(response);
+            try
+            {
+                var result = await _productTypeService.UpdateProductType(productType);
+                
+                if (result == null)
+                    return BadRequest();
+                
+                return AcceptedAtAction(nameof(UpdateProductType), result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorUpdating);
+            }
+            
         }
     }
 }

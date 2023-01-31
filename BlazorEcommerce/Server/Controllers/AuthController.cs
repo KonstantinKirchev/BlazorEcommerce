@@ -1,5 +1,6 @@
 ﻿namespace BlazorEcommerce.Server.Controllers
 {
+    using BlazorEcommerce.Server.Infrastructure;
     using Microsoft.AspNetCore.Authorization;
     using System.Security.Claims;
 
@@ -17,45 +18,60 @@
         [HttpPost("register")]
         public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegister request)
         {
-            var response = await _authService.Register(
-                new User
-                {
-                    Email = request.Email
-                },
-                request.Password);
-
-            if (!response.Success)
+            try
             {
-                return BadRequest(response);
-            }
+                var response = await _authService.Register(new User {Email = request.Email}, request.Password);
 
-            return Ok(response);
+                if (!response.Success)
+                    return BadRequest(response);
+
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorAdding);
+            }
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<ServiceResponse<string>>> Login(UserLogin request)
         {
-            var response = await _authService.Login(request.Email, request.Password);
-            if (!response.Success)
+            try
             {
-                return BadRequest(response);
-            }
+                var response = await _authService.Login(request.Email, request.Password);
+                
+                if (!response.Success)
+                    return BadRequest(response);
 
-            return Ok(response);
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorRetrieving);
+            }
         }
 
-        [HttpPost("change-password"), Authorize]
+        [HttpPut("change-password"), Authorize]
         public async Task<ActionResult<ServiceResponse<bool>>> ChangePassword([FromBody] string newPassword)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var response = await _authService.ChangePassword(int.Parse(userId), newPassword);
-
-            if (!response.Success)
+            try
             {
-                return BadRequest(response);
-            }
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                
+                if (userId == null)
+                    return NotFound();
+                
+                var response = await _authService.ChangePassword(int.Parse(userId), newPassword);
 
-            return Ok(response);
+                if (!response.Success)
+                    return BadRequest(response);
+
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorUpdating);
+            }
         }
     }
 }

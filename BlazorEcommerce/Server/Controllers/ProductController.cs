@@ -1,5 +1,6 @@
 ﻿namespace BlazorEcommerce.Server.Controllers
 {
+    using BlazorEcommerce.Server.Infrastructure;
     using BlazorEcommerce.Shared.Models;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -18,74 +19,190 @@
         [HttpGet("admin"), Authorize(Roles = "Admin")]
         public async Task<ActionResult<ServiceResponse<List<Product>>>> GetAdminProducts()
         {
-            var result = await _productService.GetAdminProducts();
-            return Ok(result);
+            try
+            {
+                var result = await _productService.GetAdminProducts();
+
+                if (result == null)
+                {
+                    return NotFound();
+                }
+                
+                return Ok(result);
+                
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorRetrieving);
+            }
         }
 
         [HttpPost, Authorize(Roles = "Admin")]
         public async Task<ActionResult<ServiceResponse<Product>>> CreateProduct(Product product)
         {
-            var result = await _productService.CreateProduct(product);
-            return Ok(result);
+            try
+            {
+                var result = await _productService.CreateProduct(product);
+
+                if (result == null)
+                {
+                    return NotFound();
+                }
+                
+                return CreatedAtAction(nameof(CreateProduct), new { id = result.Data.Id }, result);
+                
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorAdding);
+            }
+            
         }
 
         [HttpPut, Authorize(Roles = "Admin")]
         public async Task<ActionResult<ServiceResponse<Product>>> UpdateProduct(Product product)
         {
-            var result = await _productService.UpdateProduct(product);
-            return Ok(result);
+            try
+            {
+                var result = await _productService.UpdateProduct(product);
+                
+                if (result == null)
+                    return NotFound();
+                
+                return AcceptedAtAction(nameof(UpdateProduct), new { id = result.Data.Id }, result);
+                
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorUpdating);
+            }
         }
 
         [HttpDelete("{id}"), Authorize(Roles = "Admin")]
         public async Task<ActionResult<ServiceResponse<bool>>> DeleteProduct(int id)
         {
-            var result = await _productService.DeleteProduct(id);
-            return Ok(result);
+            try
+            {
+                var result = await _productService.DeleteProduct(id);
+
+                if (result == null)
+                    return BadRequest();
+
+                return AcceptedAtAction(nameof(DeleteProduct), result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorDeleting);
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult<ServiceResponse<List<Product>>>> GetProducts()
         {
-            var products = await _productService.GetProductsAsync();
+            try
+            {
+                var products = await _productService.GetProductsAsync();
 
-            return Ok(products.Value);
+                if (products == null)
+                    return NotFound();
+
+                return Ok(products.Value);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorRetrieving);
+            }
         }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ServiceResponse<Product>>> GetProduct(int id)
         {
-            var product = await _productService.GetProductAsync(id);
+            try
+            {
+                var product = await _productService.GetProductAsync(id);
 
-            return Ok(product.Value);
+                if (product == null)
+                    return BadRequest();
+
+                return Ok(product.Value);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorRetrieving);
+            }
         }
 
         [HttpGet("category/{categoryUrl}")]
         public async Task<ActionResult<ServiceResponse<List<Product>>>> GetProductsByCategory(string categoryUrl)
         {
-            var products = await _productService.GetProductsByCategoryAsync(categoryUrl);
+            try
+            {
+                var products = await _productService.GetProductsByCategoryAsync(categoryUrl);
 
-            return Ok(products.Value);
+                if (products == null)
+                    return NotFound();
+
+                return Ok(products.Value);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorRetrieving);
+            }
+            
         }
 
         [HttpGet("search/{searchText}/{page}")]
         public async Task<ActionResult<ServiceResponse<ProductSearchResult>>> SearchProducts(string searchText, int page = 1)
         {
-            var result = await _productService.SearchProducts(searchText, page);
-            return Ok(result);
+            try
+            {
+                var result = await _productService.SearchProducts(searchText, page);
+                
+                if (result == null)
+                    return NotFound();
+                
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorRetrieving);
+            }
         }
 
         [HttpGet("searchsuggestions/{searchText}")]
         public async Task<ActionResult<ServiceResponse<List<Product>>>> GetProductSearchSuggestions(string searchText)
         {
-            var result = await _productService.GetProductSearchSuggestions(searchText);
-            return Ok(result);
+            try
+            {
+                var result = await _productService.GetProductSearchSuggestions(searchText);
+                
+                if (result == null)
+                    return NotFound();
+
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorRetrieving);
+            }
         }
 
         [HttpGet("featured")]
         public async Task<ActionResult<ServiceResponse<List<Product>>>> GetFeaturedProducts()
         {
-            var result = await _productService.GetFeaturedProducts();
-            return Ok(result);
+            try
+            {
+                var result = await _productService.GetFeaturedProducts();
+                
+                if (result == null)
+                    return NotFound();
+
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorRetrieving);
+            }
         }
     }
 }

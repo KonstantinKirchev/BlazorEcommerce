@@ -1,5 +1,6 @@
 ﻿namespace BlazorEcommerce.Server.Controllers
 {
+    using BlazorEcommerce.Server.Infrastructure;
     using Microsoft.AspNetCore.Authorization;
 
     [Route("api/[controller]")]
@@ -17,13 +18,37 @@
         [HttpGet]
         public async Task<ActionResult<ServiceResponse<Address>>> GetAddress()
         {
-            return await _addressService.GetAddress();
+            try
+            {
+                var result = await _addressService.GetAddress();
+
+                if (result == null)
+                    return BadRequest();
+
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorRetrieving);
+            }
         }
 
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<Address>>> AddOrUpdateAddress(Address address)
         {
-            return await _addressService.AddOrUpdateAddress(address);
+            try
+            {
+                var result = await _addressService.AddOrUpdateAddress(address);
+                
+                if (result == null)
+                    return BadRequest();
+
+                return AcceptedAtAction(nameof(AddOrUpdateAddress), result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorAdding);
+            }
         }
     }
 }

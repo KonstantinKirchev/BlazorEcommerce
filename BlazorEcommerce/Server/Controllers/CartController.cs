@@ -1,4 +1,6 @@
-﻿namespace BlazorEcommerce.Server.Controllers
+﻿using BlazorEcommerce.Server.Infrastructure;
+
+namespace BlazorEcommerce.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -14,49 +16,132 @@
         [HttpPost("products")]
         public async Task<ActionResult<ServiceResponse<List<CartProductResponse>>>> GetCartProducts(List<CartItem> cartItems)
         {
-            var result = await _cartService.GetCartProducts(cartItems);
-            return Ok(result);
+            try
+            {
+                var result = await _cartService.GetCartProducts(cartItems);
+                
+                if (result == null)
+                    return NotFound();
+
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorRetrieving);
+            }
+            
         }
 
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<List<CartProductResponse>>>> StoreCartItems(List<CartItem> cartItems)
         {
-            var result = await _cartService.StoreCartItems(cartItems);
-            return Ok(result);
+            try
+            {
+                var result = await _cartService.StoreCartItems(cartItems);
+
+                if (result == null)
+                    return NotFound();
+
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorAdding);
+            }
         }
 
         [HttpPost("add")]
         public async Task<ActionResult<ServiceResponse<bool>>> AddToCart(CartItem cartItem)
         {
-            var result = await _cartService.AddToCart(cartItem);
-            return Ok(result);
+            try
+            {
+                var result = await _cartService.AddToCart(cartItem);
+
+                if (result == null)
+                    return NotFound();
+
+                return CreatedAtAction(nameof(AddToCart), result);
+            }
+            catch (Exception)
+            {
+
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorAdding);
+            }
         }
 
         [HttpPut("update-quantity")]
         public async Task<ActionResult<ServiceResponse<bool>>> UpdateQuantity(CartItem cartItem)
         {
-            var result = await _cartService.UpdateQuantity(cartItem);
-            return Ok(result);
+            try
+            {
+                var result = await _cartService.UpdateQuantity(cartItem);
+
+                if (result == null)
+                    return NotFound();
+
+                return AcceptedAtAction(nameof(UpdateQuantity), result);
+            }
+            catch (Exception)
+            {
+
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorUpdating);
+            }
         }
 
         [HttpDelete("{productId}/{productTypeId}")]
         public async Task<ActionResult<ServiceResponse<bool>>> RemoveItemFromCart(int productId, int productTypeId)
         {
-            var result = await _cartService.RemoveItemFromCart(productId, productTypeId);
-            return Ok(result);
+            try
+            {
+                var result = await _cartService.RemoveItemFromCart(productId, productTypeId);
+
+                if (result == null)
+                    return BadRequest();
+
+                return AcceptedAtAction(nameof(UpdateQuantity), result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorDeleting);
+            }
         }
 
         [HttpGet("count")]
         public async Task<ActionResult<ServiceResponse<int>>> GetCartItemsCount()
         {
-            return await _cartService.GetCartItemsCount();
+            try
+            {
+                var result = await _cartService.GetCartItemsCount();
+
+                if (result == null)
+                    return NotFound();
+
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorRetrieving);
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult<ServiceResponse<List<CartProductResponse>>>> GetDbCartProducts()
         {
-            var result = await _cartService.GetDbCartProducts();
-            return Ok(result);
+            try
+            {
+                var result = await _cartService.GetDbCartProducts();
+
+                if (result == null)
+                    return NotFound();
+
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServerConstants.ServerErrorRetrieving);
+            }
         }
     }
 }
