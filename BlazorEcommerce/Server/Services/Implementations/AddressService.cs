@@ -40,9 +40,20 @@
         public async Task<ServiceResponse<Address>> GetAddress()
         {
             int userId = _authService.GetUserId();
-            var address = await _context.Addresses
-                .FirstOrDefaultAsync(a => a.UserId == userId);
-            return new ServiceResponse<Address> { Data = address };
+            var address = await _context.Addresses.FirstOrDefaultAsync(a => a.UserId == userId);
+            var result = new ServiceResponse<Address>();
+            
+            if (address == null)
+            {
+                result.Success = false;
+                result.Message = "Address not found";
+
+                return result;
+            }
+            
+            result.Data = address;
+            
+            return result;
         }
     }
 }
