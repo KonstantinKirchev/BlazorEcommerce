@@ -5,13 +5,15 @@
 
 <PageTitle>Blazor Ecommerce</PageTitle>
 
+<center><h1>@welcomeMessage</h1></center>
+
 @if (SearchText == null && CategoryUrl == null)
 {
-    <FeaturedProducts />
+    <FeaturedProducts Title="@title" WelcomeMessage="DisplayMessage"/>
 }
 else
 {
-    <ProductList />
+    <ProductList WelcomeMessage="DisplayMessage"/>
 }
 
 @code{
@@ -24,9 +26,28 @@ else
     [Parameter]
     public int Page { get; set; } = 1;
 
+    string title = "Top products of today";
+
+    string welcomeMessage = "Welcome";
+
+    private void DisplayMessage(string message)
+    {
+        welcomeMessage = message; 
+    }
+
     protected override async Task OnParametersSetAsync()
     {
         await ProductService.GetProducts(CategoryUrl);
+
+        if (CategoryUrl != null)
+        { 
+            welcomeMessage = $"Welcome to {CategoryUrl} page!";
+        }
+        else if (SearchText != null)
+        {
+            welcomeMessage = $"These are the results for '{SearchText}'";
+        }
+
         if (SearchText != null)
         {
             await ProductService.SearchProducts(SearchText, Page);

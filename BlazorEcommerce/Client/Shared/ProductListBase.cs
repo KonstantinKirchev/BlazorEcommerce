@@ -7,8 +7,12 @@
         [Inject]
         public IProductService? ProductService { get; set; }
 
+        [Parameter]
+        public EventCallback<string> WelcomeMessage { get; set; }
+
         protected override void OnInitialized()
         {
+            WelcomeMessage.InvokeAsync("");
             ProductService.ProductsChanged += StateHasChanged;
         }
 
